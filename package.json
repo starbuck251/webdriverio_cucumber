@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "wdio"
+    "test": "wdio",
+    "ie": "./node_modules/.bin/wdio wdio.IE.conf.js",
+    "headless": "./node_modules/.bin/wdio wdio.HEADLESS.conf.js",
+    "regression": "./node_modules/.bin/wdio wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'"
   },
   "author": "",
   "license": "ISC",

@@ -1,16 +1,18 @@
+
 var baseUrl;
 var input = process.env.SERVER;
+var browsersSetup = require('./wdio.browsers.setup');
+const debug = process.env.DEBUG
 
 if(input == 'demo'){
     baseUrl='https://www.phptravels.net/home';
-    }else{
-        baseUrl ='https://www.phptravels.net/';
-    };
+}else{
+    baseUrl ='https://www.phptravels.net/';
+};
 
 var timeout = process.env.DEBUG ? 9999999 : 15000;
 exports.config = {
-    // inspect: true,
-    // execArgv: ['--inspect-brk=127.0.0.1:5859'],
+    
     // path: '/wd/hub',
     //
     // ====================
@@ -52,44 +54,31 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     // set to 1 runs tests serially
-    maxInstances: 5,
+    maxInstances: 1,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
+    // seleniumArgs: browsersSetup,
+    // seleniumInstallArgs: browsersSetup,
     capabilities: [
-    
+       // browsersSetup()
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         //
+       
+        // ***** IE *******
         {
-            browserName: 'chrome',
+            browserName: 'internet explorer',
+            "browserVersion" : '11',
+            //ignoreProtectedModeSettings: true,    //only applicable to IE browser
+            // ignoreZoomSetting: true,              //only applicable to IE browser
+            //'ie:ensureCleanSession': true,
             maxInstances: 2,
-            'goog:chromeOptions': {
-                args: [
-                    '--disable-infobars',
-                    '--window-size=1280,800',
-                    '--no-sandbox',
-                    '--disable-gpu',
-                    '--disable-setuid-sandbox',
-                    '--disable-dev-shm-usage',
-                ],
-            },
-        },
-        // {
-        //     browserName: 'firefox',
-        //     maxInstances: 1,
-        // }
-        // {
-        //     browserName: 'internet explorer',
-        //     ignoreProtectedModeSettings: true,    //only applicable to IE browser
-        //     // ignoreZoomSetting: true,              //only applicable to IE browser
-        //     // ensureCleanSession: true,
-        //     maxInstances: 1,
-        //     timeouts: {"implicit":5000},
-        // }
+            timeouts: {"implicit":5000},
+        }
         // If outputDir is provided WebdriverIO can capture driver session logs
         // it is possible to configure which logTypes to include/exclude.
         // excludeDriverLogs: ['*'], // pass '*' to exclude all driver session logs
@@ -142,7 +131,11 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: ['selenium-standalone',
+    services: [['selenium-standalone',{
+        installArgs: browsersSetup,
+        args: browsersSetup
+        }],
+   // ['iedriver',{killInstances:true}]
     ],
     
     // Framework you want to run your specs with.
@@ -162,14 +155,13 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter.html
-    reporters: ['spec', 
-    // ['allure',
-    // {
-    //     outputDir: "allure-results",
-    //     useCucumberStepReporter: true,
-    //     disableWebdriverStepsReporting: true,
-    //     disableMochaHooks: true
-    //     },]
+    reporters: ['spec',
+    ['allure', {
+        outputDir: 'reports/allure-results',
+        disableWebdriverStepsReporting: false,
+        disableWebdriverScreenshotsReporting: false,
+        useCucumberStepReporter: true,
+    }]
     ],
 
 
@@ -201,9 +193,7 @@ exports.config = {
         // <number> timeout for step definitions
         timeout: 60000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
-        ignoreUndefinedDefinitions: false,
-        scenarioLevelReporter: false, //treat scenarios as tests instead of steps; needed to use retry
-     //   retry: 1
+        ignoreUndefinedDefinitions: false
     },
     
     //
@@ -276,15 +266,16 @@ exports.config = {
      * Runs after a Cucumber step
      */
     afterStep: function ({ uri, feature, step }, context, { error, result, duration, passed, retries }) {
-        // if (error) {
-        //     const path =  './errorShots/'+Date.now()+ step +'.png';
-        //     browser.saveScreenshot(path);
-        // }
+        //takes a screenshot where an error occurs
+        if (error) {
+            const path =  './errorShots/'+Date.now()+'.png';
+            browser.saveScreenshot(path);
+        }
     },
     /**
      * Runs after a Cucumber scenario
      */
-    // afterScenario: function (uri, feature, scenario, result, sourceLocation) {
+    // afterScenario: function (uri, feature, scenario, result, sourceLocation) {  
     // },
     /**
      * Runs after a Cucumber feature
