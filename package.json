@@ -28,6 +28,7 @@
   "dependencies": {
     "@wdio/sync": "^6.1.14",
     "expect": "^26.0.1",
-    "expect-webdriverio": "^1.1.5"
+    "expect-webdriverio": "^1.1.5",
+    "moment": "^2.27.0"
   }
 }

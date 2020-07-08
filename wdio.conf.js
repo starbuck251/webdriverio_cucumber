@@ -1,4 +1,5 @@
 var baseUrl;
+var moment = require('moment');
 var input = process.env.SERVER;
 
 if(input == 'demo'){
@@ -249,6 +250,26 @@ exports.config = {
      */
     before: function (capabilities, specs) {
         require('expect-webdriverio') //based on Jasmine & Jest
+
+        browser.addCommand('waitAndClick', function(selector){
+            try {
+                $(selector).waitForDisplayed();
+                $(selector).click();
+            } catch (error) {
+                throw new Error (`could not click on selector: ${selector}`)
+                
+            }
+        })
+
+        browser.addCommand('waitAndType', function(selector, text){
+            try {
+                $(selector).waitForDisplayed();
+                $(selector).setValue(text);
+            } catch (error) {
+                throw new Error (`could not type into selector: ${selector}`)
+                
+            }
+        })
     },
     /**
      * Runs before a WebdriverIO command gets executed.
@@ -276,10 +297,15 @@ exports.config = {
      * Runs after a Cucumber step
      */
     afterStep: function ({ uri, feature, step }, context, { error, result, duration, passed, retries }) {
-        // if (error) {
-        //     const path =  './errorShots/'+Date.now()+ step +'.png';
-        //     browser.saveScreenshot(path);
-        // }
+        date = moment().format('YY-MM-DD');
+        if (error) {
+            //console.log(uri,feature, step);
+            console.log('the text' + step.step.text)
+            // console.log('feature is:'+ feature.description)
+            // console.log('step is:'+ step.text)
+            const path =  `./errorShots/${date}.png`;
+            browser.saveScreenshot(path);
+        }
     },
     /**
      * Runs after a Cucumber scenario
