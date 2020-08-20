@@ -1,18 +1,25 @@
-
 var baseUrl;
 var input = process.env.SERVER;
-var browsersSetup = require('./wdio.browsers.setup');
-const debug = process.env.DEBUG
+
+const seleniumOptions = {
+    drivers: {
+        chrome: { version: '84.0.4147.89' },
+        arch: process.arch,
+        // - Recent versions of the driver: https://sites.google.com/a/chromium.org/chromedriver/
+        baseURL: 'https://chromedriver.storage.googleapis.com',
+    },
+};
 
 if(input == 'demo'){
     baseUrl='https://www.phptravels.net/home';
-}else{
-    baseUrl ='https://www.phptravels.net/';
-};
+    }else{
+        baseUrl ='https://www.phptravels.net/';
+    };
 
 var timeout = process.env.DEBUG ? 9999999 : 15000;
 exports.config = {
-    
+    // inspect: true,
+    // execArgv: ['--inspect-brk=127.0.0.1:5859'],
     // path: '/wd/hub',
     //
     // ====================
@@ -54,44 +61,37 @@ exports.config = {
     // and 30 processes will get spawned. The property handles how many capabilities
     // from the same test should run tests.
     // set to 1 runs tests serially
-    maxInstances: 10,
+    maxInstances: 5,
     //
     // If you have trouble getting all important capabilities together, check out the
     // Sauce Labs platform configurator - a great tool to configure your capabilities:
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
-    // seleniumArgs: browsersSetup,
-    // seleniumInstallArgs: browsersSetup,
     capabilities: [
-       // browsersSetup()
+    
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
         //
         {
             browserName: 'chrome',
-            maxInstances: 5,
+            maxInstances: 2,
             'goog:chromeOptions': {
                 args: [
                     '--disable-infobars',
-                    '--window-size=1280,800',
-                    '--headless',
-                    '--no-sandbox',
+                    '--window-size=1900,1400',
                     '--disable-gpu',
-                    '--disable-setuid-sandbox',
                     '--disable-dev-shm-usage',
                 ],
             },
-            
         },
         // {
         //     browserName: 'firefox',
-        //     maxInstances: 5,
-        //     'moz:firefoxOptions': { headless: true, dumpio: true }
-        // },
+        //     maxInstances: 1,
+        // }
         // {
         //     browserName: 'internet explorer',
-        //     //ignoreProtectedModeSettings: true,    //only applicable to IE browser
+        //     ignoreProtectedModeSettings: true,    //only applicable to IE browser
         //     // ignoreZoomSetting: true,              //only applicable to IE browser
         //     // ensureCleanSession: true,
         //     maxInstances: 1,
@@ -109,7 +109,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'silent',
+    logLevel: 'error',
     //
     // Set specific log levels per logger
     // loggers:
@@ -125,6 +125,7 @@ exports.config = {
     //     '@wdio/applitools-service': 'info'
     // },
     //
+    outputDir: './errorLog',
     // If you only want to run your tests until a specific amount of tests have failed use
     // bail (default is 0 - don't bail, run all tests).
     bail: 0,
@@ -149,8 +150,12 @@ exports.config = {
     // Services take over a specific job you don't want to take care of. They enhance
     // your test setup with almost no effort. Unlike plugins, they don't add new
     // commands. Instead, they hook themselves up into the test process.
-    services: [['selenium-standalone'],
-    ['iedriver',{killInstances:true}]
+    services: [['selenium-standalone',
+        {
+            installArgs: seleniumOptions,
+            args: seleniumOptions,
+        },
+    ],
     ],
     
     // Framework you want to run your specs with.
@@ -170,13 +175,14 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter.html
-    reporters: ['spec',
-    ['allure', {
-        outputDir: 'reports/allure-results',
-        disableWebdriverStepsReporting: false,
-        disableWebdriverScreenshotsReporting: false,
-        useCucumberStepReporter: true,
-    }]
+    reporters: ['spec', 
+    // ['allure',
+    // {
+    //     outputDir: "allure-results",
+    //     useCucumberStepReporter: true,
+    //     disableWebdriverStepsReporting: true,
+    //     disableMochaHooks: true
+    //     },]
     ],
 
 
@@ -208,7 +214,9 @@ exports.config = {
         // <number> timeout for step definitions
         timeout: 60000,
         // <boolean> Enable this config to treat undefined definitions as warnings.
-        ignoreUndefinedDefinitions: false
+        ignoreUndefinedDefinitions: false,
+        scenarioLevelReporter: false, //treat scenarios as tests instead of steps; needed to use retry
+     //   retry: 1
     },
     
     //
@@ -281,16 +289,20 @@ exports.config = {
      * Runs after a Cucumber step
      */
     afterStep: function ({ uri, feature, step }, context, { error, result, duration, passed, retries }) {
-        //takes a screenshot where an error occurs
         if (error) {
-            const path =  './errorShots/'+Date.now()+'.png';
-            browser.saveScreenshot(path);
+            // console.log('the uri and other info')
+            //console.log({uri, feature, step});
+            if (error) {
+                console.log({ uri, feature, step });
+                const path = `./errorShots/${Date.now()}.png`;
+                browser.saveScreenshot(path);
+            }
         }
     },
     /**
      * Runs after a Cucumber scenario
      */
-    // afterScenario: function (uri, feature, scenario, result, sourceLocation) {  
+    // afterScenario: function (uri, feature, scenario, result, sourceLocation) {
     // },
     /**
      * Runs after a Cucumber feature

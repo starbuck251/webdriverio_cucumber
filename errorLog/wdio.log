@@ -1,0 +1,11 @@
+2020-08-20T08:32:15.922Z ERROR webdriver: Request failed with status 404 due to no such window: Unable to get browser
+2020-08-20T08:32:15.928Z ERROR @wdio/sync: no such window: Unable to get browser
+    at getErrorFromResponseBody (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\webdriver\build\utils.js:121:10)
+    at WebDriverRequest._request (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\webdriver\build\request.js:149:56)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at Browser.saveScreenshot (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\webdriverio\build\commands\browser\saveScreenshot.js:21:24)
+    at Browser.runCommandWithHooks (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\@wdio\sync\build\wrapCommand.js:88:21)
+    at Browser.runCommandWithHooks (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\@wdio\sync\build\wrapCommand.js:82:22)
+    at Browser.wrapCommandFn (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\@wdio\sync\build\wrapCommand.js:59:40)
+    at Object.afterStep (D:\Desktop\Code\MV\webdriverio_cucumber\config\wdio.conf.js:307:15)
+    at execHook (D:\Desktop\Code\MV\webdriverio_cucumber\node_modules\@wdio\sync\build\executeHooksWithArgs.js:32:23)

@@ -4,10 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "wdio",
-    "ie": "./node_modules/.bin/wdio wdio.IE.conf.js",
-    "headless": "./node_modules/.bin/wdio wdio.HEADLESS.conf.js",
-    "regression": "./node_modules/.bin/wdio wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'"
+    "test": "wdio ./config/wdio.conf.js",
+    "ie": "wdio ./config/wdio.IE.conf.js",
+    "headless": "wdio ./config/wdio.HEADLESS.conf.js",
+    "firefox": "wdio ./config/wdio.firefox.conf.js",
+    "regression": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'"
   },
   "author": "",
   "license": "ISC",

@@ -1,0 +1,15 @@
+09:33:01.315 INFO [ActiveSessionFactory.apply] - Capabilities are: {
+  "browserName": "internet explorer",
+  "browserVersion": "11",
+  "timeouts": {
+    "implicit": 5000
+  }
+}
+09:33:01.316 INFO [ActiveSessionFactory.lambda$apply$11] - Matched factory org.openqa.selenium.grid.session.remote.ServicedSession$Factory (provider: org.openqa.selenium.ie.InternetExplorerDriverService)
+Started InternetExplorerDriver server (32-bit)
+3.9.0.0
+Listening on port 23305
+Only local connections are allowed
+09:33:03.403 INFO [ProtocolHandshake.createSession] - Detected dialect: W3C
+09:33:03.424 INFO [RemoteSession$Factory.lambda$performHandshake$0] - Started new session c952dd50-fa44-43f0-a86d-c18a19d74913 (org.openqa.selenium.ie.InternetExplorerDriverService)
+09:33:24.079 INFO [ActiveSessions$1.onStop] - Removing session c952dd50-fa44-43f0-a86d-c18a19d74913 (org.openqa.selenium.ie.InternetExplorerDriverService)
