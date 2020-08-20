@@ -4,3 +4,6 @@ errorShots
 .vscode
 .idea
 .idea/
+errorLog
+/errorLog/
+package-lock.json
