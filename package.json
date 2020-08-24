@@ -8,7 +8,8 @@
     "ie": "wdio ./config/wdio.IE.conf.js",
     "headless": "wdio ./config/wdio.HEADLESS.conf.js",
     "firefox": "wdio ./config/wdio.firefox.conf.js",
-    "regression": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'"
+    "regression": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'",
+    "wip": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@WIP'"
   },
   "author": "",
   "license": "ISC",

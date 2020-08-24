@@ -1,4 +1,6 @@
 module.exports = {
     username: 'user@phptravels.com',
-    password: 'demouser'
+    password: 'demouser',
+    firstName: 'Demo',
+    lastName: 'User'
 }

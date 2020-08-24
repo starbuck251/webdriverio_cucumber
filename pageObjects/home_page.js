@@ -25,6 +25,14 @@ class Home_Page {
     clickLoginButton() {
         return this.login_button.click();
     };
+
+    loginToMyAccount(username,password){
+        this.my_account_button.click();
+        this.signin_button.click();
+        this.setUsername(username);
+        this.setPassword(password);
+        this.clickLoginButton();
+    }
 }
 
 module.exports = new Home_Page();
