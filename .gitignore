@@ -7,3 +7,6 @@ errorShots
 errorLog
 /errorLog/
 package-lock.json
+errorLog/wdio.log
+errorLog/wdio-selenium-standalone.log
+errorLog/wdio.log

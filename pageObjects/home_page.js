@@ -3,7 +3,7 @@ class Home_Page {
     //Page elements
 
     //using link text
-    get my_account_button() { return $('=MY ACCOUNT'); }
+    get my_account_button() { return $('*=My Account'); }
     get signin_button() { return $('=Login'); }
 
     get email_input() { return $("input[name='username']");}

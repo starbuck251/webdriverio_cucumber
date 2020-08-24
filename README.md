@@ -1,4 +1,4 @@
-Node JS 12.16.1 or higher needed to run WebdriverIOv6 (will upgrade when upgrade to version 5/6 and the node as well - don't worry!)
+Node JS 12.16.1 or higher needed to run WebdriverIOv6 
 Install NodeJS from  https://nodejs.org/en/
 
 Install Java for selenium standalone service to run
