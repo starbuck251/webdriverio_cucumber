@@ -9,7 +9,8 @@
     "headless": "wdio ./config/wdio.HEADLESS.conf.js",
     "firefox": "wdio ./config/wdio.firefox.conf.js",
     "regression": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@RegressionTest'",
-    "wip": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@WIP'"
+    "wip": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression='@WIP'",
+    "both": "wdio ./config/wdio.conf.js --cucumberOpts.tagExpression=\"@Account or @Regression\""
   },
   "author": "",
   "license": "ISC",
