@@ -1,5 +1,5 @@
 var baseUrl;
-var input = process.env.SERVER;
+var input = process.env.ENV;
 
 const seleniumOptions = {
     drivers: {
@@ -10,8 +10,9 @@ const seleniumOptions = {
     },
 };
 
+// to run on an particular environment enter ENV=demo npm run test
 if(input == 'demo'){
-    baseUrl='https://www.phptravels.net/home';
+    baseUrl='http://www.google.com';
     }else{
         baseUrl ='https://www.phptravels.net/';
     };
