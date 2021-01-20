@@ -1,9 +1,10 @@
-var baseUrl;
-var input = process.env.ENV;
+const rimraf = require('rimraf');
+let baseUrl;
+let input = process.env.ENV;
 
 const seleniumOptions = {
     drivers: {
-        chrome: { version: '84.0.4147.89' },
+        chrome: {version: '87.0.4280.20'},
         arch: process.arch,
         // - Recent versions of the driver: https://sites.google.com/a/chromium.org/chromedriver/
         baseURL: 'https://chromedriver.storage.googleapis.com',
@@ -11,11 +12,12 @@ const seleniumOptions = {
 };
 
 // to run on an particular environment enter ENV=demo npm run test
-if(input == 'demo'){
-    baseUrl='http://www.google.com';
-    }else{
-        baseUrl ='https://www.phptravels.net/';
-    };
+if (input === 'demo') {
+    baseUrl = 'http://www.google.com';
+} else {
+    baseUrl = 'http://automationpractice.com/index.php';
+}
+;
 
 var timeout = process.env.DEBUG ? 9999999 : 15000;
 exports.config = {
@@ -40,7 +42,7 @@ exports.config = {
     // directory is where your package.json resides, so `wdio` will be called from there.
     //
     specs: [
-        './features/**/*.feature'
+        './src/features/**/*.feature'
     ],
     // Patterns to exclude.
     exclude: [
@@ -69,7 +71,7 @@ exports.config = {
     // https://docs.saucelabs.com/reference/platforms-configurator
     //
     capabilities: [
-    
+
         // maxInstances can get overwritten per capability. So if you have an in-house Selenium
         // grid with only 5 firefox instances available you can make sure that not more than
         // 5 instances get started at a time.
@@ -110,7 +112,7 @@ exports.config = {
     // Define all options that are relevant for the WebdriverIO instance here
     //
     // Level of logging verbosity: trace | debug | info | warn | error | silent
-    logLevel: 'error',
+    logLevel: 'trace',
     //
     // Set specific log levels per logger
     // loggers:
@@ -158,7 +160,7 @@ exports.config = {
         },
     ],
     ],
-    
+
     // Framework you want to run your specs with.
     // The following are supported: Mocha, Jasmine, and Cucumber
     // see also: https://webdriver.io/docs/frameworks.html
@@ -176,14 +178,14 @@ exports.config = {
     // Test reporter for stdout.
     // The only one supported by default is 'dot'
     // see also: https://webdriver.io/docs/dot-reporter.html
-    reporters: ['spec', 
-    // ['allure',
-    // {
-    //     outputDir: "allure-results",
-    //     useCucumberStepReporter: true,
-    //     disableWebdriverStepsReporting: true,
-    //     disableMochaHooks: true
-    //     },]
+    reporters: ['spec',
+        // ['allure',
+        // {
+        //     outputDir: "allure-results",
+        //     useCucumberStepReporter: true,
+        //     disableWebdriverStepsReporting: true,
+        //     disableMochaHooks: true
+        //     },]
     ],
 
 
@@ -191,7 +193,7 @@ exports.config = {
     // If you are using Cucumber you need to specify the location of your step definitions.
     cucumberOpts: {
         // <string[]> (file/dir) require files before executing features
-        require: ['./step_definitions/*.js'],
+        require: ['./src/step_definitions/*.js'],
         // <boolean> show full backtrace for errors
         backtrace: false,
         // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
@@ -217,9 +219,9 @@ exports.config = {
         // <boolean> Enable this config to treat undefined definitions as warnings.
         ignoreUndefinedDefinitions: false,
         scenarioLevelReporter: false, //treat scenarios as tests instead of steps; needed to use retry
-     //   retry: 1
+        //   retry: 1
     },
-    
+
     //
     // =====
     // Hooks
@@ -233,8 +235,11 @@ exports.config = {
      * @param {Object} config wdio configuration object
      * @param {Array.<Object>} capabilities list of capabilities details
      */
-    // onPrepare: function (config, capabilities) {
-    // },
+    onPrepare: function (config, capabilities) {
+        rimraf('./errorShots/*', () => {
+            console.log('errorShots Folder Cleared');
+        });
+    },
     /**
      * Gets executed before a worker process is spawned and can be used to initialise specific service
      * for that worker as well as modify runtime environments in an async fashion.
@@ -289,16 +294,33 @@ exports.config = {
     /**
      * Runs after a Cucumber step
      */
-    afterStep: function ({ uri, feature, step }, context, { error, result, duration, passed, retries }) {
+    afterStep({uri, feature, step}, context, {
+        error, result, duration, passed, retries,
+    }) {
+        // takes a screenshot where an error occurs
+        // if (error) {
+        // //this did not work - revist and put old code back
+        // let date = new Date();
+        // const dd = String(date.getDate());
+        // const mm = String(date.getMonth());
+        // const yy = String(date.getFullYear());
+        // const h = String(date.getHours());
+        // const m = String(date.getMinutes());
+        // const s = String(date.getSeconds());
+        // date = `${yy}-${mm}-${dd} ${h}:${m}:${s}`;
+        // // console.log({ uri, feature, step });
+        // // const path = `./errorShots/${date}.png`;
+        // const path = `./errorShots/${date}-${step.step.text}.png`;
+        // browser.saveScreenshot(path);
+        //  }
+
         if (error) {
-            // console.log('the uri and other info')
-            //console.log({uri, feature, step});
-            if (error) {
-                console.log({ uri, feature, step });
-                const path = `./errorShots/${Date.now()}.png`;
-                browser.saveScreenshot(path);
-            }
+            // console.log({ uri, feature, step });
+            const path = `./errorShots/${Date.now()}.png`;
+            // browser.saveScreenshot(path);
+            browser.saveScreenshot(path);
         }
+
     },
     /**
      * Runs after a Cucumber scenario
@@ -310,7 +332,7 @@ exports.config = {
      */
     // afterFeature: function (uri, feature, scenarios) {
     // },
-    
+
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {String} commandName hook command name
@@ -329,8 +351,9 @@ exports.config = {
      */
 
     after: async function (result, capabilities, specs) {
-        await browser.pause(1000);       
-    },
+        await browser.pause(1000);
+    }
+    ,
     /**
      * Gets executed right after terminating the webdriver session.
      * @param {Object} config wdio configuration object
@@ -339,8 +362,9 @@ exports.config = {
      */
     afterSession: async function (config, capabilities, specs) {
         await browser.pause(1000);
-    },
-    
+    }
+    ,
+
     /**
      * Gets executed after all workers got shut down and the process is about to exit. An error
      * thrown in the onComplete hook will result in the test run failing.
@@ -352,10 +376,10 @@ exports.config = {
     // onComplete: function(exitCode, config, capabilities, results) {
     // },
     /**
-    * Gets executed when a refresh happens.
-    * @param {String} oldSessionId session ID of the old session
-    * @param {String} newSessionId session ID of the new session
-    */
+     * Gets executed when a refresh happens.
+     * @param {String} oldSessionId session ID of the old session
+     * @param {String} newSessionId session ID of the new session
+     */
     //onReload: function(oldSessionId, newSessionId) {
     //}
 }

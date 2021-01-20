@@ -1,6 +1,6 @@
 import { Given, When, Then } from 'cucumber';
 const Home_Page = require('../pageObjects/home_page.js');
-const My_Account = require('../pageObjects/myAccount_page.js');
+const My_Account = require('../pageObjects/create_account_page.js');
 const test_data = require('../testdata/testdata.js')
 
 
@@ -25,13 +25,13 @@ Then(/^the user will see the "([^"]*)"$/, function (area) {
             expect(My_Account.bookingIdText).toBeDisplayed;
             break;
         case 'my profile':
-            
+
             break;
         case 'wishlist':
-            
+
             break;
         case 'newsletter':
-            
+
             break;
         default:
             console.log('nothing selected');
