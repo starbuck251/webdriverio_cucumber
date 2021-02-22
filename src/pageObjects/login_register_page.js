@@ -1,3 +1,4 @@
+'use strict';
 class Login_Page {
     // ---- start of creation of page object model params----
     //Page elements

@@ -1,3 +1,4 @@
+'use strict';
 import { Given, When, Then } from 'cucumber';
 const Login_Page = require('../pageObjects/login_register_page.js');
 const Create_Account = require('../pageObjects/create_account_page.js');

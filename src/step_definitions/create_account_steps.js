@@ -5,13 +5,13 @@ const test_data = require('../testdata/testdata.js')
 
 
 Given(/^the user is on their account page$/, function () {
-    browser.url('/account/');
+    browser.url('http://automationpractice.com/account/');
     //if login page is shown then login
     if (Home_Page.my_account_button){
         Home_Page.loginToMyAccount(test_data.username, test_data.password);
         My_Account.bookingsButton.waitForDisplayed();
     }
-    expect(browser.getUrl()).toBe('https://www.phptravels.net/account/');
+    expect(browser.getUrl()).toBe('http://automationpractice.com/account/');
 });
 
 When(/^the user selects to access "([^"]*)"$/, function (area) {
