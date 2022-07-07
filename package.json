@@ -34,6 +34,6 @@
     "@wdio/sync": "^6.4.0",
     "expect": "^26.4.1",
     "expect-webdriverio": "^1.2.0",
-    "moment": "^2.29.1"
+    "moment": "^2.29.4"
   }
 }
